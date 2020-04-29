@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$key_path = 'task-2-a1-dca48e576415.json';
+	$key_path = 'CC-Assignment-2-3b7022ccad1e.json';
 	putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $key_path);
 	require __DIR__ . '/vendor/autoload.php';
 	use Google\Cloud\Datastore\DatastoreClient;
