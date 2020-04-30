@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Create a new Silex Application with Twig.  Configure it for debugging.
  * Follows Silex Skeleton pattern.

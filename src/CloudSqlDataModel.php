@@ -14,7 +14,7 @@ class CloudSqlDataModel
     private $password;
 
     /**
-     * Creates the SQL books table if it doesn't already exist.
+     * Creates the SQL users table if it doesn't already exist.
      */
     public function __construct(PDO $pdo)
     {
@@ -22,11 +22,9 @@ class CloudSqlDataModel
 
         $columns = array(
             'id serial PRIMARY KEY ',
-            'title VARCHAR(255)',
-            'author VARCHAR(255)',
-            'published_date VARCHAR(255)',
+            'player_name VARCHAR(255)',
+            'summoner_name VARCHAR(255)',
             'image_url VARCHAR(255)',
-            'description VARCHAR(255)',
             'created_by VARCHAR(255)',
             'created_by_id VARCHAR(255)',
         );
@@ -36,30 +34,30 @@ class CloudSqlDataModel
         }, $columns);
         $columnText = implode(', ', $columns);
 
-        $this->pdo->query("CREATE TABLE IF NOT EXISTS books ($columnText)");
+        $this->pdo->query("CREATE TABLE IF NOT EXISTS users ($columnText)");
     }
 
     /**
-     * Throws an exception if $book contains an invalid key.
+     * Throws an exception if $user contains an invalid key.
      *
-     * @param $book array
+     * @param $user array
      *
      * @throws \Exception
      */
-    private function verifyBook($book)
+    private function verifyUser($user)
     {
-        if ($invalid = array_diff_key($book, array_flip($this->columnNames))) {
+        if ($invalid = array_diff_key($user, array_flip($this->columnNames))) {
             throw new \Exception(sprintf(
-                'unsupported book properties: "%s"',
+                'unsupported user properties: "%s"',
                 implode(', ', $invalid)
             ));
         }
     }
 
-    public function listBooks($limit = 10, $cursor = 0)
+    public function listUsers($limit = 10, $cursor = 0)
     {
         $pdo = $this->pdo;
-        $query = 'SELECT * FROM books WHERE id > :cursor ORDER BY id LIMIT :limit';
+        $query = 'SELECT * FROM users WHERE id > :cursor ORDER BY id LIMIT :limit';
         $statement = $pdo->prepare($query);
         $statement->bindValue(':cursor', $cursor, PDO::PARAM_INT);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -78,27 +76,27 @@ class CloudSqlDataModel
             }
         }
 
-        return ['books' => $rows, 'cursor' => $nextCursor];
+        return ['users' => $rows, 'cursor' => $nextCursor];
     }
 
-    public function create($book, $id = null)
+    public function create($user, $id = null)
     {
-        $this->verifyBook($book);
+        $this->verifyUser($user);
         if ($id) {
-            $book['id'] = $id;
+            $user['id'] = $id;
         }
-        $names = array_keys($book);
+        $names = array_keys($user);
         $placeHolders = array_map(function ($key) {
             return ":$key";
         }, $names);
         $pdo = $this->pdo;
         $sql = sprintf(
-            'INSERT INTO books (%s) VALUES (%s)',
+            'INSERT INTO users (%s) VALUES (%s)',
             implode(', ', $names),
             implode(', ', $placeHolders)
         );
         $statement = $pdo->prepare($sql);
-        $statement->execute($book);
+        $statement->execute($user);
         return $this->pdo->lastInsertId();
     }
 
@@ -106,7 +104,7 @@ class CloudSqlDataModel
     {
         $pdo = $this->pdo;
         // [START gae_php_app_cloudsql_query]
-        $statement = $pdo->prepare('SELECT * FROM books WHERE id = :id');
+        $statement = $pdo->prepare('SELECT * FROM users WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -114,9 +112,9 @@ class CloudSqlDataModel
         return $result;
     }
 
-    public function update($book)
+    public function update($user)
     {
-        $this->verifyBook($book);
+        $this->verifyUser($user);
         $assignments = array_map(
             function ($column) {
                 return "$column=:$column";
@@ -124,18 +122,18 @@ class CloudSqlDataModel
             $this->columnNames
         );
         $assignmentString = implode(',', $assignments);
-        $sql = "UPDATE books SET $assignmentString WHERE id = :id";
+        $sql = "UPDATE users SET $assignmentString WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $values = array_merge(
             array_fill_keys($this->columnNames, null),
-            $book
+            $user
         );
         return $statement->execute($values);
     }
 
     public function delete($id)
     {
-        $statement = $this->pdo->prepare('DELETE FROM books WHERE id = :id');
+        $statement = $this->pdo->prepare('DELETE FROM users WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();
 

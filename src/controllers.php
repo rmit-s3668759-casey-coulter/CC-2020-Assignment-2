@@ -1,7 +1,4 @@
 <?php
-
-namespace Google\Cloud\Samples\Bookshelf;
-
 /*
  * Adds all the controllers to $app.  Follows Silex Skeleton pattern.
  */
@@ -10,28 +7,28 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Google\Cloud\Storage\Bucket;
 
 $app->get('/', function (Request $request, Response $response) {
-    return $response->withRedirect('/books');
+    return $response->withRedirect('/users');
 })->setName('home');
 
-$app->get('/books', function (Request $request, Response $response) {
+$app->get('/users', function (Request $request, Response $response) {
     $token = (int) $request->getQueryParam('page_token');
-    $bookList = $this->cloudsql->listBooks(10, $token);
+    $userList = $this->cloudsql->listUsers(10, $token);
 
     return $this->view->render($response, 'list.html.twig', [
-        'books' => $bookList['books'],
-        'next_page_token' => $bookList['cursor'],
+        'users' => $userList['users'],
+        'next_page_token' => $userList['cursor'],
     ]);
-})->setName('books');
+})->setName('users');
 
-$app->get('/books/add', function (Request $request, Response $response) {
+$app->get('/users/add', function (Request $request, Response $response) {
     return $this->view->render($response, 'form.html.twig', [
         'action' => 'Add',
-        'book' => array(),
+        'user' => array(),
     ]);
 });
 
-$app->post('/books/add', function (Request $request, Response $response) {
-    $book = $request->getParsedBody();
+$app->post('/users/add', function (Request $request, Response $response) {
+    $user = $request->getParsedBody();
     $files = $request->getUploadedFiles();
     if ($files['image']->getSize()) {
         // Store the uploaded files in a Cloud Storage object.
@@ -40,39 +37,39 @@ $app->post('/books/add', function (Request $request, Response $response) {
             'metadata' => ['contentType' => $image->getClientMediaType()],
             'predefinedAcl' => 'publicRead',
         ]);
-        $book['image_url'] = $object->info()['mediaLink'];
+        $user['image_url'] = $object->info()['mediaLink'];
     }
-    $id = $this->cloudsql->create($book);
+    $id = $this->cloudsql->create($user);
 
-    return $response->withRedirect("/books/$id");
+    return $response->withRedirect("/users/$id");
 });
 
-$app->get('/books/{id}', function (Request $request, Response $response, $args) {
-    $book = $this->cloudsql->read($args['id']);
-    if (!$book) {
+$app->get('/users/{id}', function (Request $request, Response $response, $args) {
+    $user = $this->cloudsql->read($args['id']);
+    if (!$user) {
         return $response->withStatus(404);
     }
-    return $this->view->render($response, 'view.html.twig', ['book' => $book]);
+    return $this->view->render($response, 'view.html.twig', ['user' => $user]);
 });
 
-$app->get('/books/{id}/edit', function (Request $request, Response $response, $args) {
-    $book = $this->cloudsql->read($args['id']);
-    if (!$book) {
+$app->get('/users/{id}/edit', function (Request $request, Response $response, $args) {
+    $user = $this->cloudsql->read($args['id']);
+    if (!$user) {
         return $response->withStatus(404);
     }
 
     return $this->view->render($response, 'form.html.twig', [
         'action' => 'Edit',
-        'book' => $book,
+        'user' => $user,
     ]);
 });
 
-$app->post('/books/{id}/edit', function (Request $request, Response $response, $args) {
+$app->post('/users/{id}/edit', function (Request $request, Response $response, $args) {
     if (!$this->cloudsql->read($args['id'])) {
         return $response->withStatus(404);
     }
-    $book = $request->getParsedBody();
-    $book['id'] = $args['id'];
+    $user = $request->getParsedBody();
+    $user['id'] = $args['id'];
     $files = $request->getUploadedFiles();
     if ($files['image']->getSize()) {
         $image = $files['image'];
@@ -90,21 +87,21 @@ $app->post('/books/{id}/edit', function (Request $request, Response $response, $
         ]);
         $imageUrl = $object->info()['mediaLink'];
         // [END gae_php_app_upload_image]
-        $book['image_url'] = $imageUrl;
+        $user['image_url'] = $imageUrl;
     }
-    if ($this->cloudsql->update($book)) {
-        return $response->withRedirect("/books/$args[id]");
+    if ($this->cloudsql->update($user)) {
+        return $response->withRedirect("/users/$args[id]");
     }
 
-    return new Response('Could not update book');
+    return new Response('Could not update user');
 });
 
-$app->post('/books/{id}/delete', function (Request $request, Response $response, $args) {
-    $book = $this->cloudsql->read($args['id']);
-    if ($book) {
+$app->post('/users/{id}/delete', function (Request $request, Response $response, $args) {
+    $user = $this->cloudsql->read($args['id']);
+    if ($user) {
         $this->cloudsql->delete($args['id']);
-        if (!empty($book['image_url'])) {
-            $objectName = parse_url(basename($book['image_url']), PHP_URL_PATH);
+        if (!empty($user['image_url'])) {
+            $objectName = parse_url(basename($user['image_url']), PHP_URL_PATH);
             $bucket = $this->bucket;
             // get bucket name from image
             // [START gae_php_app_delete_image]
@@ -112,7 +109,7 @@ $app->post('/books/{id}/delete', function (Request $request, Response $response,
             $object->delete();
             // [END gae_php_app_delete_image]
         }
-        return $response->withRedirect('/books');
+        return $response->withRedirect('/users');
     }
 
     return $response->withStatus(404);
