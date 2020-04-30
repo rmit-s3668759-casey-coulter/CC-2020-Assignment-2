@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
+    'Pimple' => array($vendorDir . '/pimple/pimple/src'),
 );

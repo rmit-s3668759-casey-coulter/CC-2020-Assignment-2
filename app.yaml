@@ -1,15 +1,13 @@
-runtime: php55
-api_version: 1
+# See https://cloud.google.com/appengine/docs/standard/php/config/appref for a
+# complete list of `app.yaml` directives.
 
-handlers:
-- url: /
-  script: login.php
-  
-- url: /main
-  script: main.php
- 
-- url: /password
-  script: password.php
+# Use the PHP 7.3 runtime (BETA) by replacing "php72" below with "php73"
+runtime: php72
 
-- url: /name
-  script: name.php 
+env_variables:
+    GOOGLE_STORAGE_BUCKET: lol-image-storage
+    # populate these to use the "mysql" or "postres" backends
+    CLOUDSQL_CONNECTION_NAME: cc-riot-api:australia-southeast1:user-instance
+    CLOUDSQL_USER: root
+    CLOUDSQL_PASSWORD: yesac12345
+    CLOUDSQL_DATABASE_NAME: user-data
