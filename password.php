@@ -2,14 +2,14 @@
 	session_start();
 	$key_path = 'CC-Assignment-2-3b7022ccad1e.json';
 	putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $key_path);
-	require __DIR__ . '/vendor/autoload.php';
+	require_once __DIR__ . '/vendor/autoload.php';
 	use Google\Cloud\Datastore\DatastoreClient;
 	use Google\Cloud\Datastore\Entity;
 	use Google\Cloud\Datastore\EntityIterator;
 	use Google\Cloud\Datastore\Key;
 	use Google\Cloud\Datastore\Query\Query;
 
-	$projectId = 't2-s3668759';
+	$projectId = 'cc-assignment-2-275700';
 	$datastore = new DatastoreClient(['projectId' => $projectId]);
 
 	if (isset($_POST['pass_change_but'])) {

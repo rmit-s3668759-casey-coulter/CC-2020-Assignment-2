@@ -6,19 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),
-    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
-    'Symfony\\Contracts\\Service\\' => array($vendorDir . '/symfony/service-contracts'),
-    'Symfony\\Contracts\\Cache\\' => array($vendorDir . '/symfony/cache-contracts'),
-    'Symfony\\Component\\VarExporter\\' => array($vendorDir . '/symfony/var-exporter'),
-    'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
-    'Symfony\\Component\\Cache\\' => array($vendorDir . '/symfony/cache'),
-    'RiotAPI\\LeagueAPI\\' => array($vendorDir . '/dolejska-daniel/riot-api/src/LeagueAPI'),
-    'RiotAPI\\LeagueAPICLI\\' => array($vendorDir . '/dolejska-daniel/riot-api/src/LeagueAPICLI'),
-    'RiotAPI\\DataDragonAPI\\' => array($vendorDir . '/dolejska-daniel/riot-api/src/DataDragonAPI'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),

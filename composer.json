@@ -1,6 +1,5 @@
 {
     "require": {
-        "google/cloud-datastore": "^1.11",
-        "dolejska-daniel/riot-api": "^4"
+        "google/cloud-datastore": "^1.11"
     }
 }
