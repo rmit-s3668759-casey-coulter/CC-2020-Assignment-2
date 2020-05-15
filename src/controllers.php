@@ -24,6 +24,7 @@ namespace Google\Cloud\Samples\Bookshelf;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Google\Cloud\Storage\Bucket;
+use ReCaptcha\ReCaptcha;
 
 $app->get('/', function (Request $request, Response $response) {
     return $response->withRedirect('/images');
@@ -52,19 +53,28 @@ $app->get('/images/add', function (Request $request, Response $response) {
 
 $app->post('/images/add', function (Request $request, Response $response) {
     $upload = $request->getParsedBody();
-    $files = $request->getUploadedFiles();
-    if ($files['image']->getSize()) {
-        // Store the uploaded files in a Cloud Storage object.
-        $image = $files['image'];
-        $object = $this->bucket->upload($image->getStream(), [
-            'metadata' => ['contentType' => $image->getClientMediaType()],
-            'predefinedAcl' => 'publicRead',
-        ]);
-        $upload['image_url'] = $object->info()['mediaLink'];
-    }
-    $id = $this->cloudsql->create($upload);
+    $recaptcha = new ReCaptcha('6Lf2i_cUAAAAAOHxt-gbhMb52ogTC-u2HhbQVijr');
+    $resp = $recaptcha->verify($upload['g-recaptcha-response']);
 
-    return $response->withRedirect("/images/$id");
+    if (!$resp->isSuccess()) {
+        return $response->withRedirect("/images");
+    }
+    else {
+        unset($upload['g-recaptcha-response']);
+        $files = $request->getUploadedFiles();
+        if ($files['image']->getSize()) {
+            // Store the uploaded files in a Cloud Storage object.
+            $image = $files['image'];
+            $object = $this->bucket->upload($image->getStream(), [
+                'metadata' => ['contentType' => $image->getClientMediaType()],
+                'predefinedAcl' => 'publicRead',
+            ]);
+            $upload['image_url'] = $object->info()['mediaLink'];
+        }
+        $id = $this->cloudsql->create($upload);
+
+        return $response->withRedirect("/images/$id");
+    }
 });
 
 $app->get('/images/{id}', function (Request $request, Response $response, $args) {
