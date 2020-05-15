@@ -2,32 +2,33 @@
 
 {% block content %}
 
-<h3>User</h3>
-<form method="post" action="/users/{{user.id}}/delete" id="deleteForm">
+<h3>Image</h3>
+<form method="post" action="/images/{{image.id}}/delete" id="deleteForm">
   <div class="btn-group">
-    <a href="/users/{{user.id}}/edit" class="btn btn-primary btn-sm">
+    <a href="/images/{{image.id}}/edit" class="btn btn-primary btn-sm">
       <i class="glyphicon glyphicon-edit"></i>
-      Edit user
+      Edit image
     </a>
     <button id="submit" type="submit" class="btn btn-danger btn-sm">
       <i class="glyphicon glyphicon-trash"></i>
-      Delete user
+      Delete image
     </button>
   </div>
 </form>
 
 <div class="media">
   <div class="media-left">
-    <img class="user-image"
-         src="{{ user.image_url ?: 'http://placekitten.com/g/128/192' }}">
+    <img style = "max-width: 800px; max: 800px;"
+         class="image-image"
+         src="{{ image.image_url ?: 'http://placekitten.com/g/128/192' }}">
   </div>
   <div class="media-body">
-    <h4 class="user-player_name">
-      {{user.player_name}}
+    <h4 class="image-title">
+      {{image.title}}
+      <small>{{image.published_date}}</small>
     </h4>
-    <h5 class="user-summoner_name">
-      {{user.summoner_name}}
-    </h5>
+    <h5 class="image-author">By {{image.author|default('Unknown', True)}}</h5>
+    <p class="image-description">{{image.description}}</p>
   </div>
 </div>
 

@@ -1,13 +1,10 @@
-# See https://cloud.google.com/appengine/docs/standard/php/config/appref for a
-# complete list of `app.yaml` directives.
-
 # Use the PHP 7.3 runtime (BETA) by replacing "php72" below with "php73"
 runtime: php72
 
 env_variables:
-    GOOGLE_STORAGE_BUCKET: lol-image-storage
+    GOOGLE_STORAGE_BUCKET: cc-gallery-images
     # populate these to use the "mysql" or "postres" backends
-    CLOUDSQL_CONNECTION_NAME: cc-riot-api:australia-southeast1:user-instance
+    CLOUDSQL_CONNECTION_NAME: cc-assignment-2-275700:australia-southeast1:gallery
     CLOUDSQL_USER: root
-    CLOUDSQL_PASSWORD: yesac12345
-    CLOUDSQL_DATABASE_NAME: user-data
+    CLOUDSQL_PASSWORD: test123
+    CLOUDSQL_DATABASE_NAME: gallery-data

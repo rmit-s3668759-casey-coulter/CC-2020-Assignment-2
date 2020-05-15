@@ -1,4 +1,19 @@
 <?php
+/*
+ * Copyright 2018 Google LLC All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 namespace Google\Cloud\Samples\AppEngine\GettingStarted;
 
@@ -14,7 +29,7 @@ class CloudSqlDataModel
     private $password;
 
     /**
-     * Creates the SQL users table if it doesn't already exist.
+     * Creates the SQL images table if it doesn't already exist.
      */
     public function __construct(PDO $pdo)
     {
@@ -22,9 +37,11 @@ class CloudSqlDataModel
 
         $columns = array(
             'id serial PRIMARY KEY ',
-            'player_name VARCHAR(255)',
-            'summoner_name VARCHAR(255)',
+            'title VARCHAR(255)',
+            'author VARCHAR(255)',
+            'published_date VARCHAR(255)',
             'image_url VARCHAR(255)',
+            'description VARCHAR(255)',
             'created_by VARCHAR(255)',
             'created_by_id VARCHAR(255)',
         );
@@ -34,30 +51,30 @@ class CloudSqlDataModel
         }, $columns);
         $columnText = implode(', ', $columns);
 
-        $this->pdo->query("CREATE TABLE IF NOT EXISTS users ($columnText)");
+        $this->pdo->query("CREATE TABLE IF NOT EXISTS images ($columnText)");
     }
 
     /**
-     * Throws an exception if $user contains an invalid key.
+     * Throws an exception if $image contains an invalid key.
      *
-     * @param $user array
+     * @param $image array
      *
      * @throws \Exception
      */
-    private function verifyUser($user)
+    private function verifyImage($image)
     {
-        if ($invalid = array_diff_key($user, array_flip($this->columnNames))) {
+        if ($invalid = array_diff_key($image, array_flip($this->columnNames))) {
             throw new \Exception(sprintf(
-                'unsupported user properties: "%s"',
+                'unsupported image properties: "%s"',
                 implode(', ', $invalid)
             ));
         }
     }
 
-    public function listUsers($limit = 10, $cursor = 0)
+    public function listImages($limit = 10, $cursor = 0)
     {
         $pdo = $this->pdo;
-        $query = 'SELECT * FROM users WHERE id > :cursor ORDER BY id LIMIT :limit';
+        $query = 'SELECT * FROM images WHERE id > :cursor ORDER BY id LIMIT :limit';
         $statement = $pdo->prepare($query);
         $statement->bindValue(':cursor', $cursor, PDO::PARAM_INT);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -76,27 +93,27 @@ class CloudSqlDataModel
             }
         }
 
-        return ['users' => $rows, 'cursor' => $nextCursor];
+        return ['images' => $rows, 'cursor' => $nextCursor];
     }
 
-    public function create($user, $id = null)
+    public function create($image, $id = null)
     {
-        $this->verifyUser($user);
+        $this->verifyImage($image);
         if ($id) {
-            $user['id'] = $id;
+            $image['id'] = $id;
         }
-        $names = array_keys($user);
+        $names = array_keys($image);
         $placeHolders = array_map(function ($key) {
             return ":$key";
         }, $names);
         $pdo = $this->pdo;
         $sql = sprintf(
-            'INSERT INTO users (%s) VALUES (%s)',
+            'INSERT INTO images (%s) VALUES (%s)',
             implode(', ', $names),
             implode(', ', $placeHolders)
         );
         $statement = $pdo->prepare($sql);
-        $statement->execute($user);
+        $statement->execute($image);
         return $this->pdo->lastInsertId();
     }
 
@@ -104,7 +121,7 @@ class CloudSqlDataModel
     {
         $pdo = $this->pdo;
         // [START gae_php_app_cloudsql_query]
-        $statement = $pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $statement = $pdo->prepare('SELECT * FROM images WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -112,9 +129,9 @@ class CloudSqlDataModel
         return $result;
     }
 
-    public function update($user)
+    public function update($image)
     {
-        $this->verifyUser($user);
+        $this->verifyImage($image);
         $assignments = array_map(
             function ($column) {
                 return "$column=:$column";
@@ -122,18 +139,18 @@ class CloudSqlDataModel
             $this->columnNames
         );
         $assignmentString = implode(',', $assignments);
-        $sql = "UPDATE users SET $assignmentString WHERE id = :id";
+        $sql = "UPDATE images SET $assignmentString WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $values = array_merge(
             array_fill_keys($this->columnNames, null),
-            $user
+            $image
         );
         return $statement->execute($values);
     }
 
     public function delete($id)
     {
-        $statement = $this->pdo->prepare('DELETE FROM users WHERE id = :id');
+        $statement = $this->pdo->prepare('DELETE FROM images WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();
 

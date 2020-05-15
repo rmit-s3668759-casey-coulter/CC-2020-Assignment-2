@@ -1,7 +1,7 @@
-# LoL.Ladder using PHP 7.2
+# Getting Started on App Engine for PHP 7.2
 
-This web application allows you to create a custom ladder of players for league of legends 
-where you can view the ranking of each player.  
+This sample demonstrates how to deploy a PHP application which integrates with
+Cloud SQL and Cloud Storage on App Engine Standard for PHP 7.2. The tutorial
+uses the Slim framework.
 
-Player data is gathered from the RIOT API which is available [here](https://developer.riotgames.com/) using the library 
-from [here](https://github.com/dolejska-daniel/riot-api#initializing-the-library).
+## View the [full tutorial](https://cloud.google.com/appengine/docs/standard/php7/building-app/)

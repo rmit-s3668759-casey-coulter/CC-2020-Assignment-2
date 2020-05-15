@@ -1,4 +1,23 @@
 <?php
+
+/*
+ * Copyright 2018 Google LLC All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+namespace Google\Cloud\Samples\Bookshelf;
+
 /*
  * Adds all the controllers to $app.  Follows Silex Skeleton pattern.
  */
@@ -7,28 +26,32 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Google\Cloud\Storage\Bucket;
 
 $app->get('/', function (Request $request, Response $response) {
-    return $response->withRedirect('/users');
+    return $response->withRedirect('/images');
 })->setName('home');
 
-$app->get('/users', function (Request $request, Response $response) {
+$app->get('/images', function (Request $request, Response $response) {
     $token = (int) $request->getQueryParam('page_token');
-    $userList = $this->cloudsql->listUsers(10, $token);
+    $imageList = $this->cloudsql->listImages(10, $token);
 
     return $this->view->render($response, 'list.html.twig', [
-        'users' => $userList['users'],
-        'next_page_token' => $userList['cursor'],
+        'images' => $imageList['images'],
+        'next_page_token' => $imageList['cursor'],
     ]);
-})->setName('users');
+})->setName('images');
 
-$app->get('/users/add', function (Request $request, Response $response) {
+$app->get('/map', function (Request $request, Response $response) {
+    return $this->view->render($response, 'map_location.php');
+})->setName('map');
+
+$app->get('/images/add', function (Request $request, Response $response) {
     return $this->view->render($response, 'form.html.twig', [
         'action' => 'Add',
-        'user' => array(),
+        'image' => array(),
     ]);
 });
 
-$app->post('/users/add', function (Request $request, Response $response) {
-    $user = $request->getParsedBody();
+$app->post('/images/add', function (Request $request, Response $response) {
+    $upload = $request->getParsedBody();
     $files = $request->getUploadedFiles();
     if ($files['image']->getSize()) {
         // Store the uploaded files in a Cloud Storage object.
@@ -37,39 +60,39 @@ $app->post('/users/add', function (Request $request, Response $response) {
             'metadata' => ['contentType' => $image->getClientMediaType()],
             'predefinedAcl' => 'publicRead',
         ]);
-        $user['image_url'] = $object->info()['mediaLink'];
+        $upload['image_url'] = $object->info()['mediaLink'];
     }
-    $id = $this->cloudsql->create($user);
+    $id = $this->cloudsql->create($upload);
 
-    return $response->withRedirect("/users/$id");
+    return $response->withRedirect("/images/$id");
 });
 
-$app->get('/users/{id}', function (Request $request, Response $response, $args) {
-    $user = $this->cloudsql->read($args['id']);
-    if (!$user) {
+$app->get('/images/{id}', function (Request $request, Response $response, $args) {
+    $image = $this->cloudsql->read($args['id']);
+    if (!$image) {
         return $response->withStatus(404);
     }
-    return $this->view->render($response, 'view.html.twig', ['user' => $user]);
+    return $this->view->render($response, 'view.html.twig', ['image' => $image]);
 });
 
-$app->get('/users/{id}/edit', function (Request $request, Response $response, $args) {
-    $user = $this->cloudsql->read($args['id']);
-    if (!$user) {
+$app->get('/images/{id}/edit', function (Request $request, Response $response, $args) {
+    $image = $this->cloudsql->read($args['id']);
+    if (!$image) {
         return $response->withStatus(404);
     }
 
     return $this->view->render($response, 'form.html.twig', [
         'action' => 'Edit',
-        'user' => $user,
+        'image' => $image,
     ]);
 });
 
-$app->post('/users/{id}/edit', function (Request $request, Response $response, $args) {
+$app->post('/images/{id}/edit', function (Request $request, Response $response, $args) {
     if (!$this->cloudsql->read($args['id'])) {
         return $response->withStatus(404);
     }
-    $user = $request->getParsedBody();
-    $user['id'] = $args['id'];
+    $upload = $request->getParsedBody();
+    $upload['id'] = $args['id'];
     $files = $request->getUploadedFiles();
     if ($files['image']->getSize()) {
         $image = $files['image'];
@@ -87,21 +110,21 @@ $app->post('/users/{id}/edit', function (Request $request, Response $response, $
         ]);
         $imageUrl = $object->info()['mediaLink'];
         // [END gae_php_app_upload_image]
-        $user['image_url'] = $imageUrl;
+        $upload['image_url'] = $imageUrl;
     }
-    if ($this->cloudsql->update($user)) {
-        return $response->withRedirect("/users/$args[id]");
+    if ($this->cloudsql->update($upload)) {
+        return $response->withRedirect("/images/$args[id]");
     }
 
-    return new Response('Could not update user');
+    return new Response('Could not update image');
 });
 
-$app->post('/users/{id}/delete', function (Request $request, Response $response, $args) {
-    $user = $this->cloudsql->read($args['id']);
-    if ($user) {
+$app->post('/images/{id}/delete', function (Request $request, Response $response, $args) {
+    $image = $this->cloudsql->read($args['id']);
+    if ($image) {
         $this->cloudsql->delete($args['id']);
-        if (!empty($user['image_url'])) {
-            $objectName = parse_url(basename($user['image_url']), PHP_URL_PATH);
+        if (!empty($image['image_url'])) {
+            $objectName = parse_url(basename($image['image_url']), PHP_URL_PATH);
             $bucket = $this->bucket;
             // get bucket name from image
             // [START gae_php_app_delete_image]
@@ -109,7 +132,7 @@ $app->post('/users/{id}/delete', function (Request $request, Response $response,
             $object->delete();
             // [END gae_php_app_delete_image]
         }
-        return $response->withRedirect('/users');
+        return $response->withRedirect('/images');
     }
 
     return $response->withStatus(404);

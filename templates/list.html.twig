@@ -2,31 +2,30 @@
 
 {% block content %}
 
-<h3>Users</h3>
-<a href="/users/add" class="btn btn-success btn-sm">
+<h3>Images</h3>
+<a href="/images/add" class="btn btn-success btn-sm">
   <i class="glyphicon glyphicon-plus"></i>
-  Add user
+  Add image
 </a>
 
-{% for user in users %}
+{% for image in images %}
 <div class="media">
-  <a href="/users/{{user.id}}">
+  <a href="/images/{{image.id}}">
     <div class="media-left">
-      {% if user.image_url %}
-        <img src="{{user.image_url}}"
-          style = "max-width:200px; max-height:200px;">
+      {% if image.image_url %}
+        <img style = "max-width:500px; max-height: 500px;" src="{{image.image_url}}">
       {% else %}
-        <img src="http://placekitten.com/g/128/192"
-          style = "max-width:200px; max-height:200px;">
+        <img src="http://placekitten.com/g/128/192">
       {% endif %}
     </div>
     <div class="media-body">
-      <h4>{{user.player_name}}</h4>
+      <h4>{{image.title}}</h4>
+      <p>{{image.author}}</p>
     </div>
   </a>
 </div>
 {% else %}
-<p>No users found</p>
+<p>No images found</p>
 {% endfor %}
 
 {% if next_page_token %}

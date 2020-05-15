@@ -43,16 +43,16 @@ $container['bucket'] = function ($container) {
 // Get the Cloud SQL MySQL connection object
 $container['cloudsql'] = function ($container) {
     // Data Model
-    $dbName = getenv('CLOUDSQL_DATABASE_NAME') ?: 'user-instance';
+    $dbName = getenv('CLOUDSQL_DATABASE_NAME') ?: 'gallery';
     $dbConn = getenv('CLOUDSQL_CONNECTION_NAME');
     $dbUser = getenv('CLOUDSQL_USER');
     $dbPass = getenv('CLOUDSQL_PASSWORD');
     // [START gae_php_app_cloudsql_client_setup]
     // Fill the variables below to match your Cloud SQL configuration.
-    $dbConn = 'cc-riot-api:australia-southeast1:user-instance';
-    $dbName = 'user-data';
-    $dbUser = 'root';
-    $dbPass = 'yesac12345';
+    // $dbConn = 'YOUR_CLOUDSQL_CONNECTION_NAME';
+    // $dbName = 'YOUR_CLOUDSQL_DATABASE_NAME';
+    // $dbUser = 'YOUR_CLOUDSQL_USER';
+    // $dbPass = 'YOUR_CLOUDSQL_PASSWORD';
     $dsn = "mysql:unix_socket=/cloudsql/${dbConn};dbname=${dbName}";
     $pdo = new PDO($dsn, $dbUser, $dbPass);
     // [END gae_php_app_cloudsql_client_setup]
