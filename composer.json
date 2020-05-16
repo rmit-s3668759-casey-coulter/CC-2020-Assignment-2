@@ -4,7 +4,8 @@
     "slim/slim": "^3.0",
     "slim/twig-view": "^2.4",
     "twig/cssinliner-extra": "^3.0",
-    "google/recaptcha": "^1.2"
+    "google/recaptcha": "^1.2",
+    "google/cloud-bigquery": "^1.16"
   },
   "autoload": {
      "psr-4": {

@@ -16,6 +16,7 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+        'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -38,6 +39,8 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         'R' => 
         array (
             'ReCaptcha\\' => 10,
+            'Ramsey\\Uuid\\' => 12,
+            'Ramsey\\Collection\\' => 18,
         ),
         'P' => 
         array (
@@ -58,6 +61,7 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
             'Google\\Cloud\\Storage\\' => 21,
             'Google\\Cloud\\Samples\\AppEngine\\GettingStarted\\' => 46,
             'Google\\Cloud\\Core\\' => 18,
+            'Google\\Cloud\\BigQuery\\' => 22,
             'Google\\CRC32\\' => 13,
             'Google\\Auth\\' => 12,
         ),
@@ -65,6 +69,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             'Firebase\\JWT\\' => 13,
             'FastRoute\\' => 10,
+        ),
+        'B' => 
+        array (
+            'Brick\\Math\\' => 11,
         ),
     );
 
@@ -113,6 +121,14 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/..' . '/google/recaptcha/src/ReCaptcha',
         ),
+        'Ramsey\\Uuid\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
+        ),
+        'Ramsey\\Collection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ramsey/collection/src',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -157,6 +173,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/..' . '/google/cloud-core/src',
         ),
+        'Google\\Cloud\\BigQuery\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-bigquery/src',
+        ),
         'Google\\CRC32\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/crc32/src',
@@ -172,6 +192,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         'FastRoute\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+        'Brick\\Math\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/brick/math/src',
         ),
     );
 
