@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+
+<h3>Matching IP Address for IP: {{ip}}</h3>
+{% for result in results %}
+    <label> {{ result }} </label>
+{% endfor %}
+
+{% endblock %}

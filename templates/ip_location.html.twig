@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+<h3>IP Address Finder</h3>
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="ip">Enter IP Address without the fullstops</label>
+        <input type="text" name="ip_address" id="ip_address" value="{{ip_address.ip_address}}" class="form-control"/>
+    </div>
+    
+    <button id="submit" name="ip_address_enter" class="btn btn-success">Submit</button>
+</form>
+
+{% endblock %}

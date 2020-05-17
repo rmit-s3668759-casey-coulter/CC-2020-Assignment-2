@@ -1,6 +1,8 @@
 <?php
 
 namespace Google\Cloud\Samples\Bookshelf;
+putenv('/../GOOGLE_APPLICATION_CREDENTIALS=CC-Assignment-2-7372e69e9d4d');
+$projectId = 'cc-assignment-2-275700';
 
 /*
  * Adds all the controllers to $app.  Follows Silex Skeleton pattern.
@@ -9,6 +11,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Google\Cloud\Storage\Bucket;
 use ReCaptcha\ReCaptcha;
+use Google\Cloud\BigQuery\BigQueryClient;
+use Google\Cloud\Core\ExponentialBackoff;
+
+
 
 $app->get('/', function (Request $request, Response $response) {
     return $response->withRedirect('/images');
@@ -29,8 +35,51 @@ $app->get('/map', function (Request $request, Response $response) {
 })->setName('map');
 
 $app->get('/iplocations', function (Request $request, Response $response) {
-    return $this->view->render($response, 'ip_location.php');
-})->setName('iplocations');
+    return $this->view->render($response, 'ip_location.html.twig', [
+        'ip_address' => array()
+    ]);
+});
+
+$app->post('/iplocations', function (Request $request, Response $response) {
+    $ip_address = $request->getParsedBody();
+    $geonameID = $ip_address['ip_address'];
+        
+    if (strlen($geonameID) != 0) {
+        $query = "SELECT city_name, country_name FROM `cc-assignment-2-275700.IP_GeoLocation.GeoLite2_City_Locations` WHERE geoname_id = {$geonameID}";
+        //search location
+        $bigQuery = new BigQueryClient([
+            'projectId' => $projectId
+        ]);
+        $jobConfig = $bigQuery->query($query);
+        $job = $bigQuery->startQuery($jobConfig);
+            
+        $backoff = new ExponentialBackoff(10);
+        $backoff->execute(function () use ($job) {
+            $job->reload();
+            if (!$job->isComplete()) {
+                throw new Exception('Job has not yet completed', 500);
+            }
+        });
+        $queryResults = $job->queryResults();
+            
+        $i = 0;
+        $results = array();
+        foreach ($queryResults as $row) {
+            foreach ($row as $column => $value) {
+                if (strpos($row, 'city_name') == false && strpos($column, 'country_name') == false) {
+                    array_push($results, $value);
+                }
+            }
+        }
+        return $this->view->render($response, 'ip_list.html.twig', [
+            'ip' => $geonameID,
+            'results' => $results,
+        ]);
+    }
+    else {
+        return $response->withRedirect("/images");
+    }
+});
 
 $app->get('/images/add', function (Request $request, Response $response) {
     return $this->view->render($response, 'form.html.twig', [

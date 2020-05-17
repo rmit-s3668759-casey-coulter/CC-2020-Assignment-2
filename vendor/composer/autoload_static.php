@@ -111,7 +111,8 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         ),
         'Slim\\Views\\' => 
         array (
-            0 => __DIR__ . '/..' . '/slim/twig-view/src',
+            0 => __DIR__ . '/..' . '/slim/php-view/src',
+            1 => __DIR__ . '/..' . '/slim/twig-view/src',
         ),
         'Slim\\' => 
         array (
