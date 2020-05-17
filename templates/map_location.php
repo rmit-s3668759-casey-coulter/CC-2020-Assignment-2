@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  </head>
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -29,10 +28,11 @@
         <ul class="nav navbar-nav">
           <li><a href="/images">Image Gallery</a></li>
           <li><a href="/map">Map</a></li>
+          <li><a href="/iplocations">IP Locations</a></li>
         </ul>
       </div>
     </div>
-
+    
     <div id="map"></div>
     <script>
       // Note: This example requires that you consent to location sharing when
