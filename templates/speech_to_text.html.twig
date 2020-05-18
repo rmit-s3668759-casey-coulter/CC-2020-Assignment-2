@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+<h3>Transcribe Audio File</h3>
+
+<form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="ip">Enter file name</label>
+        <input type="text" name="fileName" id="fileName" value="{{fileName.fileName}}" class="form-control"/>
+    </div>
+    
+    <button id="submit" name="fileName_enter" class="btn btn-success">Submit</button>
+</form>
+
+{% endblock %}

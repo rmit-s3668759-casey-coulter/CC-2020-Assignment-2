@@ -13,7 +13,10 @@ use Google\Cloud\Storage\Bucket;
 use ReCaptcha\ReCaptcha;
 use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\Core\ExponentialBackoff;
-
+use Google\Cloud\Speech\V1\SpeechClient;
+use Google\Cloud\Speech\V1\RecognitionAudio;
+use Google\Cloud\Speech\V1\RecognitionConfig;
+use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 
 
 $app->get('/', function (Request $request, Response $response) {
@@ -29,6 +32,53 @@ $app->get('/images', function (Request $request, Response $response) {
         'next_page_token' => $imageList['cursor'],
     ]);
 })->setName('images');
+
+$app->get('/speech_to_text', function (Request $request, Response $response) {
+    return $this->view->render($response, 'speech_to_text.html.twig', [
+        'fileName' => array()
+    ]);
+});
+
+$app->post('/speech_to_text', function (Request $request, Response $response) {
+    if (strlen($fileName) > 0) {
+
+        # The name of the audio file to transcribe
+        $audioFile = __DIR__ . '/../test_new.flac';
+
+        # get contents of a file into a string
+        $content = file_get_contents($audioFile);
+
+        # set string as audio content
+        $audio = (new RecognitionAudio())
+            ->setContent($content);
+
+        # The audio file's encoding, sample rate and language
+        $config = new RecognitionConfig([
+            'encoding' => AudioEncoding::FLAC,
+            'sample_rate_hertz' => 48000,
+            'language_code' => 'en-US'
+        ]);
+
+        # Instantiates a client
+        $client = new SpeechClient();
+
+        # Detects speech in the audio file
+        $response = $client->recognize($config, $audio);
+
+        # Print most likely transcription
+        foreach ($response->getResults() as $result) {
+            $alternatives = $result->getAlternatives();
+            $mostLikely = $alternatives[0];
+            $transcript = $mostLikely->getTranscript();
+            printf('Transcript: %s' . PHP_EOL, $transcript);
+        }
+
+        $client->close();
+    }
+    else {
+        return $response->withRedirect("/images");
+    }
+});
 
 $app->get('/map', function (Request $request, Response $response) {
     return $this->view->render($response, 'map_location.php');
