@@ -17,6 +17,7 @@ use Google\Cloud\Speech\V1\SpeechClient;
 use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
+use Google\Cloud\Translate\TranslateClient;
 
 
 $app->get('/', function (Request $request, Response $response) {
@@ -32,6 +33,39 @@ $app->get('/images', function (Request $request, Response $response) {
         'next_page_token' => $imageList['cursor'],
     ]);
 })->setName('images');
+
+$app->get('/translation', function (Request $request, Response $response) {
+    return $this->view->render($response, 'translation.html.twig', [
+        'fileName' => array()
+    ]);
+});
+
+$app->post('/translation', function (Request $request, Response $response) {
+
+    //if data was entered
+    if(strlen($_POST['translate']) > 0){
+
+        /** Uncomment and populate these variables in your code */
+        $text = $_POST['translate'];
+        $targetLanguage = 'en';  // Language to translate to
+
+        $translate = new TranslateClient();
+        $result = $translate->translate($text, [
+            'target' => $targetLanguage,
+        ]);
+
+        $results = array();
+        array_push($results,$result[source]);
+        array_push($results,$result[text]);
+
+        return $this->view->render($response, 'translation_results.html.twig', [
+            'translate' => $translate,
+            'results' => $results,
+        ]);
+
+    }
+
+});
 
 $app->get('/speech_to_text', function (Request $request, Response $response) {
     return $this->view->render($response, 'speech_to_text.html.twig', [
@@ -66,14 +100,20 @@ $app->post('/speech_to_text', function (Request $request, Response $response) {
         $response = $client->recognize($config, $audio);
 
         # Print most likely transcription
+        $results = array();
         foreach ($response->getResults() as $result) {
             $alternatives = $result->getAlternatives();
             $mostLikely = $alternatives[0];
             $transcript = $mostLikely->getTranscript();
-            printf('Transcript: %s' . PHP_EOL, $transcript);
+            array_push($results,$transcript);
         }
 
         $client->close();
+
+        return $this->view->render($response, 'speech_to_text_results.html.twig', [
+            'fileName' => $fileName,
+            'results' => $results,
+        ]);
     }
     else {
         return $response->withRedirect("/images");
