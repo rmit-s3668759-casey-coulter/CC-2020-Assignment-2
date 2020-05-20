@@ -20,19 +20,26 @@
     </style>
   </head>
   <body>
-    <div class="navbar navbar-default">
+  <div class="navbar navbar-default">
       <div class="container">
         <div class="navbar-header">
-          <div class="navbar-brand">App Name</div>
+          <div class="navbar-brand">Toolbox</div>
         </div>
         <ul class="nav navbar-nav">
+          <li><a href="/home">Home</a></li>
           <li><a href="/images">Image Gallery</a></li>
           <li><a href="/map">Map</a></li>
           <li><a href="/iplocations">IP Locations</a></li>
+          <li><a href="/speech_to_text">Transcribe</a></li>
+          <li><a href="/translation">Translate</a></li>
+          <li><a href="/help">Help</a></li>
         </ul>
       </div>
     </div>
     
+    <div class="container">
+      <p>Below is where you are currently connected, scroll in and take a look</p>
+    </div>
     <div id="map"></div>
     <script>
       // Note: This example requires that you consent to location sharing when

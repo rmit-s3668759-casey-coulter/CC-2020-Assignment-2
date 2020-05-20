@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h3>Image</h3>
+<h3> {{image.title}} </h3>
 <form method="post" action="/images/{{image.id}}/delete" id="deleteForm">
   <div class="btn-group">
     <a href="/images/{{image.id}}/edit" class="btn btn-primary btn-sm">

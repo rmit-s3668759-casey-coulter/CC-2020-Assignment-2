@@ -19,10 +19,13 @@ use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 use Google\Cloud\Translate\TranslateClient;
 
-
 $app->get('/', function (Request $request, Response $response) {
-    return $response->withRedirect('/images');
+    return $response->withRedirect('/home');
 })->setName('home');
+
+$app->get('/home', function (Request $request, Response $response) {
+    return $this->view->render($response, 'home.html.twig');
+});
 
 $app->get('/images', function (Request $request, Response $response) {
     $token = (int) $request->getQueryParam('page_token');
@@ -189,7 +192,7 @@ $app->post('/images/add', function (Request $request, Response $response) {
     $resp = $recaptcha->verify($upload['g-recaptcha-response']);
 
     if (!$resp->isSuccess()) {
-        return $response->withRedirect("/images");
+        return $response->withRedirect("/home");
     }
     else {
         unset($upload['g-recaptcha-response']);
@@ -230,35 +233,44 @@ $app->get('/images/{id}/edit', function (Request $request, Response $response, $
 });
 
 $app->post('/images/{id}/edit', function (Request $request, Response $response, $args) {
-    if (!$this->cloudsql->read($args['id'])) {
-        return $response->withStatus(404);
-    }
     $upload = $request->getParsedBody();
-    $upload['id'] = $args['id'];
-    $files = $request->getUploadedFiles();
-    if ($files['image']->getSize()) {
-        $image = $files['image'];
-        $bucket = $this->bucket;
-        $imageStream = $image->getStream();
-        $imageContentType = $image->getClientMediaType();
-        // [START gae_php_app_upload_image]
-        // Set your own image file path and content type below to upload an
-        // image to Cloud Storage.
-        // $imageStream = fopen('/path/to/your_image.jpg', 'r');
-        // $imageContentType = 'image/jpg';
-        $object = $bucket->upload($imageStream, [
-            'metadata' => ['contentType' => $imageContentType],
-            'predefinedAcl' => 'publicRead',
-        ]);
-        $imageUrl = $object->info()['mediaLink'];
-        // [END gae_php_app_upload_image]
-        $upload['image_url'] = $imageUrl;
-    }
-    if ($this->cloudsql->update($upload)) {
-        return $response->withRedirect("/images/$args[id]");
-    }
+    $recaptcha = new ReCaptcha('6Lf2i_cUAAAAAOHxt-gbhMb52ogTC-u2HhbQVijr');
+    $resp = $recaptcha->verify($upload['g-recaptcha-response']);
 
-    return new Response('Could not update image');
+    if (!$resp->isSuccess()) {
+        return $response->withRedirect("/home");
+    }
+    else {
+        if (!$this->cloudsql->read($args['id'])) {
+            return $response->withStatus(404);
+        }
+        unset($upload['g-recaptcha-response']);
+        $upload['id'] = $args['id'];
+        $files = $request->getUploadedFiles();
+        if ($files['image']->getSize()) {
+            $image = $files['image'];
+            $bucket = $this->bucket;
+            $imageStream = $image->getStream();
+            $imageContentType = $image->getClientMediaType();
+            // [START gae_php_app_upload_image]
+            // Set your own image file path and content type below to upload an
+            // image to Cloud Storage.
+            // $imageStream = fopen('/path/to/your_image.jpg', 'r');
+            // $imageContentType = 'image/jpg';
+            $object = $bucket->upload($imageStream, [
+                'metadata' => ['contentType' => $imageContentType],
+                'predefinedAcl' => 'publicRead',
+            ]);
+            $imageUrl = $object->info()['mediaLink'];
+            // [END gae_php_app_upload_image]
+            $upload['image_url'] = $imageUrl;
+        }
+        if ($this->cloudsql->update($upload)) {
+            return $response->withRedirect("/images/$args[id]");
+        }
+
+        return new Response('Could not update image');
+    }
 });
 
 $app->post('/images/{id}/delete', function (Request $request, Response $response, $args) {
