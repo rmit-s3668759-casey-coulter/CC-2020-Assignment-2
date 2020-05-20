@@ -58,12 +58,23 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'Grpc\\Gcp\\' => 9,
+            'Grpc\\' => 5,
+            'Google\\Protobuf\\' => 16,
+            'Google\\Cloud\\Translate\\' => 23,
             'Google\\Cloud\\Storage\\' => 21,
+            'Google\\Cloud\\Speech\\' => 20,
             'Google\\Cloud\\Samples\\AppEngine\\GettingStarted\\' => 46,
             'Google\\Cloud\\Core\\' => 18,
             'Google\\Cloud\\BigQuery\\' => 22,
             'Google\\CRC32\\' => 13,
             'Google\\Auth\\' => 12,
+            'Google\\ApiCore\\' => 15,
+            'Google\\' => 7,
+            'GPBMetadata\\Google\\Protobuf\\' => 28,
+            'GPBMetadata\\Google\\Cloud\\Translate\\' => 35,
+            'GPBMetadata\\Google\\Cloud\\Speech\\' => 32,
+            'GPBMetadata\\Google\\' => 19,
         ),
         'F' => 
         array (
@@ -162,9 +173,29 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Grpc\\Gcp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/grpc-gcp/src',
+        ),
+        'Grpc\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/grpc/grpc/src/lib',
+        ),
+        'Google\\Protobuf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/protobuf/src/Google/Protobuf',
+        ),
+        'Google\\Cloud\\Translate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-translate/src',
+        ),
         'Google\\Cloud\\Storage\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/cloud-storage/src',
+        ),
+        'Google\\Cloud\\Speech\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-speech/src',
         ),
         'Google\\Cloud\\Samples\\AppEngine\\GettingStarted\\' => 
         array (
@@ -186,6 +217,31 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/..' . '/google/auth/src',
         ),
+        'Google\\ApiCore\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/gax/src',
+        ),
+        'Google\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/common-protos/src',
+        ),
+        'GPBMetadata\\Google\\Protobuf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/protobuf/src/GPBMetadata/Google/Protobuf',
+        ),
+        'GPBMetadata\\Google\\Cloud\\Translate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-translate/metadata',
+        ),
+        'GPBMetadata\\Google\\Cloud\\Speech\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-speech/metadata',
+        ),
+        'GPBMetadata\\Google\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/common-protos/metadata',
+            1 => __DIR__ . '/..' . '/google/gax/metadata',
+        ),
         'Firebase\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
@@ -198,6 +254,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/google/grpc-gcp/src/generated',
     );
 
     public static $prefixesPsr0 = array (
@@ -222,6 +282,7 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit5e1031a5115bcd145b500a9e73145599::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit5e1031a5115bcd145b500a9e73145599::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit5e1031a5115bcd145b500a9e73145599::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit5e1031a5115bcd145b500a9e73145599::$prefixesPsr0;
 
         }, null, ClassLoader::class);

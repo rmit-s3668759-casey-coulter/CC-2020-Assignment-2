@@ -74,6 +74,10 @@ $app->get('/speech_to_text', function (Request $request, Response $response) {
 });
 
 $app->post('/speech_to_text', function (Request $request, Response $response) {
+
+    $fileID = $request->getParsedBody();
+    $fileName = $fileID['fileName'];
+
     if (strlen($fileName) > 0) {
 
         # The name of the audio file to transcribe
@@ -97,22 +101,20 @@ $app->post('/speech_to_text', function (Request $request, Response $response) {
         $client = new SpeechClient();
 
         # Detects speech in the audio file
-        $response = $client->recognize($config, $audio);
+        $audio_response = $client->recognize($config, $audio);
 
-        # Print most likely transcription
-        $results = array();
-        foreach ($response->getResults() as $result) {
+        # extract most likely transcription
+        foreach ($audio_response->getResults() as $result) {
             $alternatives = $result->getAlternatives();
             $mostLikely = $alternatives[0];
             $transcript = $mostLikely->getTranscript();
-            array_push($results,$transcript);
         }
 
         $client->close();
 
         return $this->view->render($response, 'speech_to_text_results.html.twig', [
             'fileName' => $fileName,
-            'results' => $results,
+            'transcript' => $transcript,
         ]);
     }
     else {

@@ -6,7 +6,9 @@
     "twig/cssinliner-extra": "^3.0",
     "google/recaptcha": "^1.2",
     "google/cloud-bigquery": "^1.16",
-    "slim/php-view": "^2.2"
+    "slim/php-view": "^2.2",
+    "google/cloud-translate": "^1.7",
+    "google/cloud-speech": "^1.1"
   },
   "autoload": {
      "psr-4": {
