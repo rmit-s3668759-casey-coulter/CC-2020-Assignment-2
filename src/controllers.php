@@ -124,6 +124,11 @@ $app->get('/map', function (Request $request, Response $response) {
     return $this->view->render($response, 'map_location.php');
 })->setName('map');
 
+
+$app->get('/help', function (Request $request, Response $response) {
+    return $this->view->render($response, 'help.html.twig');
+})->setName('help');
+
 $app->get('/iplocations', function (Request $request, Response $response) {
     return $this->view->render($response, 'ip_location.html.twig', [
         'ip_address' => array()

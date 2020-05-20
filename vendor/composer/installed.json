@@ -275,6 +275,55 @@
         "description": "Google Cloud PHP shared dependency, providing functionality useful to all components."
     },
     {
+        "name": "google/cloud-dialogflow",
+        "version": "v0.14.1",
+        "version_normalized": "0.14.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/googleapis/google-cloud-php-dialogflow.git",
+            "reference": "9069e8a03bb930cfafd87694ab15b55fa1ddc4fc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/googleapis/google-cloud-php-dialogflow/zipball/9069e8a03bb930cfafd87694ab15b55fa1ddc4fc",
+            "reference": "9069e8a03bb930cfafd87694ab15b55fa1ddc4fc",
+            "shasum": ""
+        },
+        "require": {
+            "google/gax": "^1.1"
+        },
+        "require-dev": {
+            "google/cloud-core": "^1.35",
+            "phpdocumentor/reflection": "^3.0",
+            "phpunit/phpunit": "^4.8|^5.0"
+        },
+        "suggest": {
+            "ext-grpc": "Enables use of gRPC, a universal high-performance RPC framework created by Google."
+        },
+        "time": "2020-04-07T20:58:05+00:00",
+        "type": "library",
+        "extra": {
+            "component": {
+                "id": "cloud-dialogflow",
+                "path": "Dialogflow",
+                "entry": null,
+                "target": "googleapis/google-cloud-php-dialogflow.git"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Google\\Cloud\\Dialogflow\\": "src",
+                "GPBMetadata\\Google\\Cloud\\Dialogflow\\": "metadata"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "description": "Google Cloud Dialogflow Client for PHP"
+    },
+    {
         "name": "google/cloud-speech",
         "version": "v1.1.0",
         "version_normalized": "1.1.0.0",

@@ -65,6 +65,7 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
             'Google\\Cloud\\Storage\\' => 21,
             'Google\\Cloud\\Speech\\' => 20,
             'Google\\Cloud\\Samples\\AppEngine\\GettingStarted\\' => 46,
+            'Google\\Cloud\\Dialogflow\\' => 24,
             'Google\\Cloud\\Core\\' => 18,
             'Google\\Cloud\\BigQuery\\' => 22,
             'Google\\CRC32\\' => 13,
@@ -74,6 +75,7 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
             'GPBMetadata\\Google\\Protobuf\\' => 28,
             'GPBMetadata\\Google\\Cloud\\Translate\\' => 35,
             'GPBMetadata\\Google\\Cloud\\Speech\\' => 32,
+            'GPBMetadata\\Google\\Cloud\\Dialogflow\\' => 36,
             'GPBMetadata\\Google\\' => 19,
         ),
         'F' => 
@@ -201,6 +203,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
+        'Google\\Cloud\\Dialogflow\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-dialogflow/src',
+        ),
         'Google\\Cloud\\Core\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/cloud-core/src',
@@ -236,6 +242,10 @@ class ComposerStaticInit5e1031a5115bcd145b500a9e73145599
         'GPBMetadata\\Google\\Cloud\\Speech\\' => 
         array (
             0 => __DIR__ . '/..' . '/google/cloud-speech/metadata',
+        ),
+        'GPBMetadata\\Google\\Cloud\\Dialogflow\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/google/cloud-dialogflow/metadata',
         ),
         'GPBMetadata\\Google\\' => 
         array (
