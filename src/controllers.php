@@ -42,11 +42,13 @@ $app->get('/translation', function (Request $request, Response $response) {
 
 $app->post('/translation', function (Request $request, Response $response) {
 
-    //if data was entered
-    if(strlen($_POST['translate']) > 0){
+    $translate = $request->getParsedBody();
+    $source_file = $translate['translate'];
 
-        /** Uncomment and populate these variables in your code */
-        $text = $_POST['translate'];
+    //if data was entered
+    if(strlen($source_file) > 0){
+
+        $text = $source_file;
         $targetLanguage = 'en';  // Language to translate to
 
         $translate = new TranslateClient();
@@ -54,13 +56,9 @@ $app->post('/translation', function (Request $request, Response $response) {
             'target' => $targetLanguage,
         ]);
 
-        $results = array();
-        array_push($results,$result[source]);
-        array_push($results,$result[text]);
-
         return $this->view->render($response, 'translation_results.html.twig', [
-            'translate' => $translate,
-            'results' => $results,
+            'source' => $source_file,
+            'translation' => $result[text],
         ]);
 
     }
