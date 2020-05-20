@@ -38,6 +38,7 @@
     </div>
     
     <div class="container">
+      <h3>Map</h3>
       <p>Below is where you are currently connected, scroll in and take a look</p>
     </div>
     <div id="map"></div>
@@ -86,5 +87,10 @@
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyyrzXzHAv3zJqv1xCubqo9Ho6XZMzccg&callback=initMap">
     </script>
+
+    <footer class="page-footer font-small black">
+      <br>
+      <div class="footer-copyright text-center py-3">© 2020 Copyright: Casey Coulter and Ido Yaron - Cloud Computing 2020</div>
+    </footer>
   </body>
 </html>

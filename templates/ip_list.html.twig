@@ -2,9 +2,11 @@
 
 {% block content %}
 
-<h3>Matching IP Address for IP: {{ip}}</h3>
+<h3>IP Location Search Complete</h3>
+<h5>Matching IP Address for IP: {{ip}}</h5>
+<p>Result is:</p>
 {% for result in results %}
-    <label> {{ result }} </label>
+    <p> {{ result }} </p>
 {% endfor %}
 
 {% endblock %}
