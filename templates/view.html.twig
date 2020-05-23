@@ -1,6 +1,6 @@
-<!-- This page is used for viewing a particular image that has been uploaded -->
+{# This page is used for viewing a particular image that has been uploaded #}
 
-<!-- Import the base html file -->
+{# Import the base html file #}
 {% extends "base.html.twig" %}
 
 {% block content %}
@@ -21,7 +21,7 @@
 
 <div class="media">
   <div class="media-left">
-    <!-- If an image doesn't exist for this upload, show the default kitten -->
+    {# If an image doesn't exist for this upload, show the default kitten #}
     <img style = "max-width: 800px; max: 800px;"
          class="image-image"
          src="{{ image.image_url ?: 'http://placekitten.com/g/128/192' }}">

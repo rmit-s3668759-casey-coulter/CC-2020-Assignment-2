@@ -1,13 +1,15 @@
-<!-- This page is used to get the IP address from the user and 
-<!-- run BigQuery
+{# This page is used to get the IP address from the user and run BigQuery #}
 
-<!-- Import the base html file -->
+{# Import the base html file #}
 {% extends "base.html.twig" %}
 
 {% block content %}
 <h3>IP Address Finder</h3>
+<p>The IP Address Finder will search a database of over 115,000 from all over the world
+and return the country and city that IP address belongs to.</p>
+<p>Due to the size of the database, the page may take a few moments to laod</p>
 
-<!-- Form to be submitted with variable names -->
+{# Form to be submitted with variable names #}
 <form method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="ip">Enter IP Address without the fullstops</label>

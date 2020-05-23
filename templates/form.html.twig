@@ -1,13 +1,13 @@
-<!-- This page is used for uploading a new image to the website -->
+{# This page is used for uploading a new image to the website #}
 
-<!-- Import the base html file -->
+{# Import the base html file #}
 {% extends "base.html.twig" %}
 
 {% block content %}
-<!-- Dynamically name the heading for Add, edit, delete -->
+{# Dynamically name the heading for Add, edit, delete #}
 <h3>{{action}} Image</h3>
 
-<!-- Create form to be submitted to get data entered when uploading a new image -->
+{# Create form to be submitted to get data entered when uploading a new image #}
 <form method="POST" enctype="multipart/form-data">
   <div class="form-group">
     <label for="title">Title</label>
@@ -39,7 +39,7 @@
     <input type="text" name="image_url" id="image_url" value="{{image.image_url}}" class="form-control"/>
   </div>
 
-  <!-- Add reCaptcha to the page with our site key-->
+  {# Add reCaptcha to the page with our site key#}
   <div class="g-recaptcha" data-sitekey="6Lf2i_cUAAAAAA6Vl-wJAcixPTTFh_tHqmzYgINz"></div>
 
   <button id="submit" type="submit" class="btn btn-success">Save</button>
