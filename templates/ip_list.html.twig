@@ -1,3 +1,7 @@
+<!-- This page is used to show the results of the BigQuery database search
+<!-- Variables are passed from the controller
+
+<!-- Import the base html file -->
 {% extends "base.html.twig" %}
 
 {% block content %}
@@ -5,8 +9,10 @@
 <h3>IP Location Search Complete</h3>
 <h5>Matching IP Address for IP: {{ip}}</h5>
 <p>Result is:</p>
+<p>
 {% for result in results %}
-    <p> {{ result }} </p>
+    {{ result }}
 {% endfor %}
+</p>
 
 {% endblock %}

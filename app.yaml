@@ -1,9 +1,8 @@
-# Use the PHP 7.3 runtime (BETA) by replacing "php72" below with "php73"
 runtime: php72
 
+# The below variables are used in the model for the database and cloud bucket
 env_variables:
     GOOGLE_STORAGE_BUCKET: cc-gallery-images
-    # populate these to use the "mysql" or "postres" backends
     CLOUDSQL_CONNECTION_NAME: cc-assignment-2-275700:australia-southeast1:gallery
     CLOUDSQL_USER: root
     CLOUDSQL_PASSWORD: test123

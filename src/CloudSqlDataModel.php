@@ -1,40 +1,18 @@
 <?php
-/*
- * Copyright 2018 Google LLC All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 namespace Google\Cloud\Samples\AppEngine\GettingStarted;
-
 use PDO;
 
-/**
- * Class CloudSql is a wrapper for making calls to a Cloud SQL MySQL database.
- */
-class CloudSqlDataModel
-{
+# Custom SQL wrapper for calling CloudSqlDataModel
+class CloudSqlDataModel {
     private $dsn;
     private $user;
     private $password;
 
-    /**
-     * Creates the SQL images table if it doesn't already exist.
-     */
-    public function __construct(PDO $pdo)
-    {
+    # Create images table if it doesn't exist
+    public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
-
+        # Columns for the table
         $columns = array(
             'id serial PRIMARY KEY ',
             'title VARCHAR(255)',
@@ -54,15 +32,8 @@ class CloudSqlDataModel
         $this->pdo->query("CREATE TABLE IF NOT EXISTS images ($columnText)");
     }
 
-    /**
-     * Throws an exception if $image contains an invalid key.
-     *
-     * @param $image array
-     *
-     * @throws \Exception
-     */
-    private function verifyImage($image)
-    {
+    # Check to see if the passed image variable contains a valid key
+    private function verifyImage($image) {
         if ($invalid = array_diff_key($image, array_flip($this->columnNames))) {
             throw new \Exception(sprintf(
                 'unsupported image properties: "%s"',
@@ -71,18 +42,15 @@ class CloudSqlDataModel
         }
     }
 
-    public function listImages($limit = 10, $cursor = 0)
-    {
+    # Function for returning a list of images, limiting the result to 10
+    public function listImages($limit = 10, $cursor = 0) {
         $pdo = $this->pdo;
         $query = 'SELECT * FROM images WHERE id > :cursor ORDER BY id LIMIT :limit';
         $statement = $pdo->prepare($query);
         $statement->bindValue(':cursor', $cursor, PDO::PARAM_INT);
         $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
         $statement->execute();
-        // Uncomment this while loop to output the results
-        // while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-        //     var_dump($row);
-        // }
+ 
         $rows = array();
         $nextCursor = null;
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
@@ -96,8 +64,9 @@ class CloudSqlDataModel
         return ['images' => $rows, 'cursor' => $nextCursor];
     }
 
-    public function create($image, $id = null)
-    {
+    # Function used for creating a new image upload in the database
+    public function create($image, $id = null) {
+        # Check the image variable is valid
         $this->verifyImage($image);
         if ($id) {
             $image['id'] = $id;
@@ -117,20 +86,19 @@ class CloudSqlDataModel
         return $this->pdo->lastInsertId();
     }
 
-    public function read($id)
-    {
+    # Get an  image that matches the passed id from the database
+    public function read($id) {
         $pdo = $this->pdo;
-        // [START gae_php_app_cloudsql_query]
         $statement = $pdo->prepare('SELECT * FROM images WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        // [END gae_php_app_cloudsql_query]
         return $result;
     }
 
-    public function update($image)
-    {
+    # Used for updating an image in the database
+    public function update($image) {
+        # Check the image variable passed is valid
         $this->verifyImage($image);
         $assignments = array_map(
             function ($column) {
@@ -148,8 +116,8 @@ class CloudSqlDataModel
         return $statement->execute($values);
     }
 
-    public function delete($id)
-    {
+    # Used for deleting an image upload from the database
+    public function delete($id) {
         $statement = $this->pdo->prepare('DELETE FROM images WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
         $statement->execute();

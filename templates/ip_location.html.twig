@@ -1,8 +1,13 @@
+<!-- This page is used to get the IP address from the user and 
+<!-- run BigQuery
+
+<!-- Import the base html file -->
 {% extends "base.html.twig" %}
 
 {% block content %}
 <h3>IP Address Finder</h3>
 
+<!-- Form to be submitted with variable names -->
 <form method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="ip">Enter IP Address without the fullstops</label>

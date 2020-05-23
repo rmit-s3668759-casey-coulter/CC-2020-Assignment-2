@@ -1,3 +1,7 @@
+<!-- This file is used to run the google map of your current IP address
+This is written in PHP rather than Twig/HTML because we couldn't get it running -->
+
+<!-- Below is simply copied from the base.html.twig file for same formatting -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,13 +9,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- Add styling for google map -->
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
       #map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 80%;
         margin: 0;
@@ -19,6 +21,7 @@
       }
     </style>
   </head>
+
   <body>
   <div class="navbar navbar-default">
       <div class="container">
@@ -42,11 +45,11 @@
       <p>Below is where you are currently connected, scroll in and take a look</p>
     </div>
     <div id="map"></div>
+
+    <!-- The below code wont run properly unless the user allows the consent to 
+    location sharing when asked in the browser.  Error: "The Geolocation service
+    failed" means the user did not give persmission -->
     <script>
-      // Note: This example requires that you consent to location sharing when
-      // prompted by your browser. If you see the error "The Geolocation service
-      // failed.", it means you probably did not give permission for the browser to
-      // locate you.
       var map, infoWindow;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -55,7 +58,7 @@
         });
         infoWindow = new google.maps.InfoWindow;
 
-        // Try HTML5 geolocation.
+        // Attempt HTML5 Geolocation
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
             var pos = {
@@ -71,7 +74,7 @@
             handleLocationError(true, infoWindow, map.getCenter());
           });
         } else {
-          // Browser doesn't support Geolocation
+          // Show this error if the browser doesn't allow Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
       }
@@ -84,6 +87,7 @@
         infoWindow.open(map);
       }
     </script>
+    
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyyrzXzHAv3zJqv1xCubqo9Ho6XZMzccg&callback=initMap">
     </script>
