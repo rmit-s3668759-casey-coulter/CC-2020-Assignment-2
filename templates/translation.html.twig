@@ -5,10 +5,14 @@
 
 {% block content %}
 <h3>Translator</h3>
+<p>Enter any text from any language and our translator will convert it from that language
+to English</p>
+
+<br>
 
 <form method="POST" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="ip">Enter text that you would like converted to English</label>
+        <label for="ip">Enter the text you would like translated</label>
         <p>If you can't think of anything, try copying one of these: '你好！你好吗', 'великий день для блинов' or '割り当てはとても楽しいです'</p>
         <input type="text" name="translate" id="translate" value="{{translate.translate}}" class="form-control"/>
     </div>
