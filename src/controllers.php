@@ -89,7 +89,7 @@ $app->post('/speech_to_text', function (Request $request, Response $response) {
     # Check if the textbox has content
     if (strlen($fileName) > 0) {
         # The name of the audio file to transcribe
-        $audioFile = __DIR__ . '/../test_new.flac';
+        $audioFile = __DIR__ . "/../{$fileName}.flac";
 
         # Get contents of a file into a string
         $content = file_get_contents($audioFile);
